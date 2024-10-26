@@ -1,0 +1,31 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: productpage-routing
+  namespace: prod # Or your desired namespace
+spec:
+  hosts:
+  - "istio.aungmyohein.cloud"
+  gateways:
+  - gw-external  # The gateway created above
+  http:
+  - match:
+    - uri:
+        prefix: "/"  # Match the root URL
+    rewrite:
+      uri: "/productpage"  # Rewrite the URL to include the product page
+    route:
+    - destination:
+        host: productpage  # The name of your product page service
+        subset: v1 # Name of the subset configured in the destination rules
+        port:
+          number: 9080  # Port for your service (adjust if needed)
+      weight: 20 # Loadbalancing regarding ( blue+green, canary )
+    - destination:
+        host: productpage  # The name of your product page service
+        subset: v2 # Name of the subset configured in the dr rules
+        port:
+          number: 80  # Port for your service (adjust if needed)
+      weight: 80 #  # Loadbalancing regarding ( blue+green, canary )
+        
+

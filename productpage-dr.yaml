@@ -1,0 +1,14 @@
+apiVersion: networking.istio.io/v1alpha3
+kind: DestinationRule
+metadata:
+  name: productpage-destination
+  namespace: prod
+spec:
+  host: productpage # Internal Service
+  subsets:
+  - name: v1
+    labels:
+      version: v1 # LABELS FROM PRODUCT PAGE v1
+  - name: v2
+    labels:
+      version: v2 # LABELS FROM NGINX 
